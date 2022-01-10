@@ -1,0 +1,7 @@
+venv/
+.idea/
+*.md.backup
+test*.py
+*.rar
+*.zip
+
