@@ -1,18 +1,21 @@
 import os
 
 import pygame
-import ctypes
+import sys
 
-myappid = 'mycompany.myproduct.subproduct.version' # arbitrary string
-ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
+#
+# myappid = 'mycompany.myproduct.subproduct.version' # arbitrary string
+# ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
+from pygame.sprite import AbstractGroup
 
 pygame.init()
-size = width, height = (720, 540)
+size = width, height = (820, 540)
 screen = pygame.display.set_mode(size)
 pygame.display.set_caption("Puzzle-A-Day")
 icon = pygame.image.load('images/icon.jpg')
 pygame.display.set_icon(icon)
 fps = 60
+
 
 def load_image(name, colorkey=None):
     fullname = os.path.join('images', name)
@@ -29,7 +32,10 @@ def load_image(name, colorkey=None):
 
 
 class Board:
-    field = []
+    def __init__(self):
+        self.field = []
+        self.sprites = pygame.sprite.Group()
+
 
     def new(self):
         self.field = [[-1, -1, -1, -1, -1, -1, -1, -1, -1],
@@ -71,9 +77,10 @@ class Board:
             screen.blit(text, (text_x, 440))
 
 
-class Piece(pygame.sprite.DirtySprite):
+class Piece(pygame.sprite.Sprite):
 
-    def __init__(self, x, y, number, image):
+    def __init__(self, x, y, number, *group, image=None):
+        super().__init__(*group)
         self.x = x
         self.y = y
         self.number = number
@@ -85,15 +92,14 @@ class Piece(pygame.sprite.DirtySprite):
         return 0
 
 
-class L_big_piece(Piece):
+class LBigPiece(Piece):
 
-    def __init__(self, x, y):
-        image = load_image('L-big.png')
-        self.rect = image.get_rect()
+    def __init__(self, x, y, *group):
+        super().__init__(x, y, 1, group)
+        self.image = load_image('L-big.png')
+        self.rect = self.image.get_rect()
         self.rect.x, self.rect.y = x, y
-        super.__init__(x, y, 1, image)
         self.visible = 1
-        self.dirty = 1
 
 
 board = Board()
