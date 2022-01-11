@@ -9,7 +9,7 @@ import sys
 from pygame.sprite import AbstractGroup
 
 pygame.init()
-size = width, height = (820, 540)
+size = width, height = (1080, 540)
 screen = pygame.display.set_mode(size)
 pygame.display.set_caption("Puzzle-A-Day")
 icon = pygame.image.load('images/icon.jpg')
@@ -35,7 +35,10 @@ class Board:
     def __init__(self):
         self.field = []
         self.sprites = pygame.sprite.Group()
-
+        LBigPiece(550, 350, self.sprites)
+        CPiece(620, 270, self.sprites)
+        LSmallPiece(550, 20, self.sprites)
+        LOPiece(620, 10, self.sprites)
 
     def new(self):
         self.field = [[-1, -1, -1, -1, -1, -1, -1, -1, -1],
@@ -86,17 +89,52 @@ class Piece(pygame.sprite.Sprite):
         self.number = number
         self.image = image
 
-    def click(self, *args):
+    def update(self, *args):
         if args and args[0].type == pygame.MOUSEBUTTONDOWN and self.rect.collidepoint(args[0].pos):
+            print(self.number)
             return self.number
         return 0
 
 
 class LBigPiece(Piece):
+    image = load_image('L-big.png')
 
     def __init__(self, x, y, *group):
         super().__init__(x, y, 1, group)
-        self.image = load_image('L-big.png')
+        self.image = LBigPiece.image
+        self.rect = self.image.get_rect()
+        self.rect.x, self.rect.y = x, y
+        self.visible = 1
+
+
+class CPiece(Piece):
+    image = load_image('C.png')
+
+    def __init__(self, x, y, *group):
+        super().__init__(x, y, 2, group)
+        self.image = CPiece.image
+        self.rect = self.image.get_rect()
+        self.rect.x, self.rect.y = x, y
+        self.visible = 1
+
+
+class LSmallPiece(Piece):
+    image = load_image('L-small.png')
+
+    def __init__(self, x, y, *group):
+        super().__init__(x, y, 3, group)
+        self.image = LSmallPiece.image
+        self.rect = self.image.get_rect()
+        self.rect.x, self.rect.y = x, y
+        self.visible = 1
+
+
+class LOPiece(Piece):
+    image = load_image('O.png')
+
+    def __init__(self, x, y, *group):
+        super().__init__(x, y, 3, group)
+        self.image = LOPiece.image
         self.rect = self.image.get_rect()
         self.rect.x, self.rect.y = x, y
         self.visible = 1
@@ -109,5 +147,8 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            board.sprites.update(event)
     board.draw()
+    board.sprites.draw(screen)
     pygame.display.flip()
