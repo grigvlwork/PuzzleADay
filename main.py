@@ -38,8 +38,9 @@ class Board:
         LBigPiece(550, 350, self.sprites)
         CPiece(620, 270, self.sprites)
         LSmallPiece(550, 20, self.sprites)
-        LOPiece(620, 10, self.sprites)
+        OPiece(620, 10, self.sprites)
         PPiece(760, 10, self.sprites)
+        TPiece(760, 280, self.sprites)
 
     def new(self):
         self.field = [[-1, -1, -1, -1, -1, -1, -1, -1, -1],
@@ -89,6 +90,7 @@ class Piece(pygame.sprite.Sprite):
         self.y = y
         self.number = number
         self.image = image
+        self.matrix = []
 
     def update(self, *args):
         if args and args[0].type == pygame.MOUSEBUTTONDOWN and self.rect.collidepoint(args[0].pos):
@@ -140,12 +142,12 @@ class LSmallPiece(Piece):
         self.visible = 1
 
 
-class LOPiece(Piece):
+class OPiece(Piece):
     image = load_image('O.png')
 
     def __init__(self, x, y, *group):
         super().__init__(x, y, 3, group)
-        self.image = LOPiece.image
+        self.image = OPiece.image
         self.rect = self.image.get_rect()
         self.rect.x, self.rect.y = x, y
         self.matrix = [[1, 1],
@@ -162,6 +164,20 @@ class PPiece(Piece):
         self.rect = self.image.get_rect()
         self.rect.x, self.rect.y = x, y
         self.matrix = [[1, 1],
+                       [1, 1],
+                       [1, 0]]
+        self.visible = 1
+
+class TPiece(Piece):
+    image = load_image('T.png')
+
+    def __init__(self, x, y, *group):
+        super().__init__(x, y, 3, group)
+        self.image = TPiece.image
+        self.rect = self.image.get_rect()
+        self.rect.x, self.rect.y = x, y
+        self.matrix = [[1, 0],
+                       [1, 0],
                        [1, 1],
                        [1, 0]]
         self.visible = 1
