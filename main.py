@@ -39,6 +39,7 @@ class Board:
         CPiece(620, 270, self.sprites)
         LSmallPiece(550, 20, self.sprites)
         LOPiece(620, 10, self.sprites)
+        PPiece(760, 10, self.sprites)
 
     def new(self):
         self.field = [[-1, -1, -1, -1, -1, -1, -1, -1, -1],
@@ -104,6 +105,9 @@ class LBigPiece(Piece):
         self.image = LBigPiece.image
         self.rect = self.image.get_rect()
         self.rect.x, self.rect.y = x, y
+        self.matrix = [[1, 0, 0],
+                       [1, 0, 0],
+                       [1, 1, 1]]
         self.visible = 1
 
 
@@ -115,6 +119,9 @@ class CPiece(Piece):
         self.image = CPiece.image
         self.rect = self.image.get_rect()
         self.rect.x, self.rect.y = x, y
+        self.matrix = [[1, 1],
+                       [1, 0],
+                       [1, 1]]
         self.visible = 1
 
 
@@ -126,6 +133,10 @@ class LSmallPiece(Piece):
         self.image = LSmallPiece.image
         self.rect = self.image.get_rect()
         self.rect.x, self.rect.y = x, y
+        self.matrix = [[1, 0],
+                       [1, 0],
+                       [1, 0],
+                       [1, 1]]
         self.visible = 1
 
 
@@ -137,8 +148,23 @@ class LOPiece(Piece):
         self.image = LOPiece.image
         self.rect = self.image.get_rect()
         self.rect.x, self.rect.y = x, y
+        self.matrix = [[1, 1],
+                       [1, 1],
+                       [1, 1]]
         self.visible = 1
 
+class PPiece(Piece):
+    image = load_image('P.png')
+
+    def __init__(self, x, y, *group):
+        super().__init__(x, y, 3, group)
+        self.image = PPiece.image
+        self.rect = self.image.get_rect()
+        self.rect.x, self.rect.y = x, y
+        self.matrix = [[1, 1],
+                       [1, 1],
+                       [1, 0]]
+        self.visible = 1
 
 board = Board()
 board.new()
