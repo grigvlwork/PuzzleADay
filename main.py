@@ -41,6 +41,8 @@ class Board:
         OPiece(620, 10, self.sprites)
         PPiece(760, 10, self.sprites)
         TPiece(760, 280, self.sprites)
+        ZBigPiece(890, 10, self.sprites)
+        ZSmallPiece(900, 280, self.sprites)
 
     def new(self):
         self.field = [[-1, -1, -1, -1, -1, -1, -1, -1, -1],
@@ -100,7 +102,7 @@ class Piece(pygame.sprite.Sprite):
 
 
 class LBigPiece(Piece):
-    image = load_image('L-big.png')
+    image = load_image('L-bigt.png')
 
     def __init__(self, x, y, *group):
         super().__init__(x, y, 1, group)
@@ -114,7 +116,7 @@ class LBigPiece(Piece):
 
 
 class CPiece(Piece):
-    image = load_image('C.png')
+    image = load_image('Ct.png')
 
     def __init__(self, x, y, *group):
         super().__init__(x, y, 2, group)
@@ -128,7 +130,7 @@ class CPiece(Piece):
 
 
 class LSmallPiece(Piece):
-    image = load_image('L-small.png')
+    image = load_image('L-smallt.png')
 
     def __init__(self, x, y, *group):
         super().__init__(x, y, 3, group)
@@ -143,10 +145,10 @@ class LSmallPiece(Piece):
 
 
 class OPiece(Piece):
-    image = load_image('O.png')
+    image = load_image('Ot.png')
 
     def __init__(self, x, y, *group):
-        super().__init__(x, y, 3, group)
+        super().__init__(x, y, 4, group)
         self.image = OPiece.image
         self.rect = self.image.get_rect()
         self.rect.x, self.rect.y = x, y
@@ -156,10 +158,10 @@ class OPiece(Piece):
         self.visible = 1
 
 class PPiece(Piece):
-    image = load_image('P.png')
+    image = load_image('Pt.png')
 
     def __init__(self, x, y, *group):
-        super().__init__(x, y, 3, group)
+        super().__init__(x, y, 5, group)
         self.image = PPiece.image
         self.rect = self.image.get_rect()
         self.rect.x, self.rect.y = x, y
@@ -169,10 +171,10 @@ class PPiece(Piece):
         self.visible = 1
 
 class TPiece(Piece):
-    image = load_image('T.png')
+    image = load_image('Tt.png')
 
     def __init__(self, x, y, *group):
-        super().__init__(x, y, 3, group)
+        super().__init__(x, y, 6, group)
         self.image = TPiece.image
         self.rect = self.image.get_rect()
         self.rect.x, self.rect.y = x, y
@@ -180,6 +182,33 @@ class TPiece(Piece):
                        [1, 0],
                        [1, 1],
                        [1, 0]]
+        self.visible = 1
+
+class ZBigPiece(Piece):
+    image = load_image('Z-bigt.png')
+
+    def __init__(self, x, y, *group):
+        super().__init__(x, y, 7, group)
+        self.image = ZBigPiece.image
+        self.rect = self.image.get_rect()
+        self.rect.x, self.rect.y = x, y
+        self.matrix = [[1, 1, 0],
+                       [0, 1, 0],
+                       [0, 1, 1]]
+        self.visible = 1
+
+class ZSmallPiece(Piece):
+    image = load_image('Z-smallt.png')
+
+    def __init__(self, x, y, *group):
+        super().__init__(x, y, 8, group)
+        self.image = ZSmallPiece.image
+        self.rect = self.image.get_rect()
+        self.rect.x, self.rect.y = x, y
+        self.matrix = [[1, 0],
+                       [1, 0],
+                       [1, 1],
+                       [0, 1]]
         self.visible = 1
 
 board = Board()
