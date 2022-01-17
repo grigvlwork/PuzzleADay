@@ -35,14 +35,22 @@ class Board:
     def __init__(self):
         self.field = []
         self.sprites = pygame.sprite.Group()
-        LBigPiece(550, 350, self.sprites)
-        CPiece(620, 270, self.sprites)
-        LSmallPiece(550, 20, self.sprites)
-        OPiece(620, 10, self.sprites)
-        PPiece(760, 10, self.sprites)
-        TPiece(760, 280, self.sprites)
-        ZBigPiece(890, 10, self.sprites)
-        ZSmallPiece(900, 280, self.sprites)
+        self.l_big_piece = LBigPiece(550, 350, self.sprites)
+        self.c_piece = CPiece(620, 270, self.sprites)
+        self.l_small_piece = LSmallPiece(550, 20, self.sprites)
+        self.o_piece = OPiece(620, 10, self.sprites)
+        self.p_piece = PPiece(760, 10, self.sprites)
+        self.t_piece = TPiece(760, 280, self.sprites)
+        self.z_big_piece = ZBigPiece(890, 10, self.sprites)
+        self.z_small_piece = ZSmallPiece(900, 280, self.sprites)
+        self.arr_sprites = [self.l_big_piece, self.c_piece, self.l_small_piece, self.o_piece,
+                            self.p_piece, self.t_piece, self.z_big_piece, self.z_small_piece]
+        self.current_piece = None
+
+    def set_current_piece(self, number):
+        for sprite in self.arr_sprites:
+            if sprite.is_current:
+                self.current_piece = sprite.number
 
     def new(self):
         self.field = [[-1, -1, -1, -1, -1, -1, -1, -1, -1],
@@ -93,12 +101,11 @@ class Piece(pygame.sprite.Sprite):
         self.number = number
         self.image = image
         self.matrix = []
+        self.is_current = False
 
     def update(self, *args):
         if args and args[0].type == pygame.MOUSEBUTTONDOWN and self.rect.collidepoint(args[0].pos):
-            print(self.number)
-            return self.number
-        return 0
+            self.is_current = not self.is_current
 
 
 class LBigPiece(Piece):
@@ -114,7 +121,6 @@ class LBigPiece(Piece):
                        [1, 1, 1]]
         self.visible = 1
 
-
 class CPiece(Piece):
     image = load_image('Ct.png')
 
@@ -127,7 +133,6 @@ class CPiece(Piece):
                        [1, 0],
                        [1, 1]]
         self.visible = 1
-
 
 class LSmallPiece(Piece):
     image = load_image('L-smallt.png')
@@ -142,7 +147,6 @@ class LSmallPiece(Piece):
                        [1, 0],
                        [1, 1]]
         self.visible = 1
-
 
 class OPiece(Piece):
     image = load_image('Ot.png')
