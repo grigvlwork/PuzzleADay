@@ -71,6 +71,7 @@ class Board:
         border_color = pygame.Color(135, 83, 24)
         pygame.draw.rect(screen, pygame.Color(245, 198, 144), (0, 0, 540, 540))
         pygame.draw.rect(screen, border_color, (1, 1, 537, 537), 2)
+        pygame.draw.rect(screen, pygame.Color(245, 198, 144), (540, 0, 1080, 540))
         font = pygame.font.Font(None, 33)
         num = iter(range(1, 32))
         for i in range(2):
@@ -99,8 +100,10 @@ class Piece(pygame.sprite.Sprite):
         super().__init__(*group)
         self.x = x
         self.y = y
+        self.dx = 0
+        self.dy = 0
         self.number = number
-        self.image = image
+        self.image = pixelimage
         self.matrix = []
         self.is_current = False
         self.rect = self.image.get_rect()
@@ -109,9 +112,12 @@ class Piece(pygame.sprite.Sprite):
     def update(self, *args):
         if args and args[0].type == pygame.MOUSEBUTTONDOWN and self.rect.collidepoint(args[0].pos):
             self.is_current = not self.is_current
+            if self.is_current:
+                self.dx = self.rect.x - args[0].pos[0]
+                self.dy = self.rect.y - args[0].pos[1]
         if self.is_current and event.type == pygame.MOUSEMOTION:
-            self.rect.x = event.pos[0]
-            self.rect.y = event.pos[1]
+            self.rect.x = event.pos[0] + self.dx
+            self.rect.y = event.pos[1] + self.dy
 
 
 
@@ -230,6 +236,8 @@ while running:
         if event.type == pygame.QUIT:
             running = False
         if event.type == pygame.MOUSEBUTTONDOWN:
+            board.sprites.update(event)
+        if event.type == pygame.MOUSEMOTION:
             board.sprites.update(event)
     board.draw()
     board.sprites.draw(screen)
