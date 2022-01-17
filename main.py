@@ -119,7 +119,9 @@ class Piece(pygame.sprite.Sprite):
             self.rect.x = event.pos[0] + self.dx
             self.rect.y = event.pos[1] + self.dy
 
+    def rotate(self, direction):
 
+        pass
 
 class LBigPiece(Piece):
     image = load_image('L-bigt.png')
