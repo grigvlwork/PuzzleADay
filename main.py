@@ -31,6 +31,8 @@ def load_image(name, colorkey=None):
     return image
 
 
+pixelimage = load_image('pix1.png')
+
 class Board:
     def __init__(self):
         self.field = []
@@ -93,7 +95,6 @@ class Board:
 
 
 class Piece(pygame.sprite.Sprite):
-
     def __init__(self, x, y, number, *group, image=None):
         super().__init__(*group)
         self.x = x
@@ -102,10 +103,16 @@ class Piece(pygame.sprite.Sprite):
         self.image = image
         self.matrix = []
         self.is_current = False
+        self.rect = self.image.get_rect()
+        self.rect.x, self.rect.y = x, y
 
     def update(self, *args):
         if args and args[0].type == pygame.MOUSEBUTTONDOWN and self.rect.collidepoint(args[0].pos):
             self.is_current = not self.is_current
+        if self.is_current and event.type == pygame.MOUSEMOTION:
+            self.rect.x = event.pos[0]
+            self.rect.y = event.pos[1]
+
 
 
 class LBigPiece(Piece):
