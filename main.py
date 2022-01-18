@@ -2,10 +2,8 @@ import os
 
 import pygame
 import sys
+from matrix_oper import rotate_matrix_right, rotate_matrix_left, mirror_matrix
 
-#
-# myappid = 'mycompany.myproduct.subproduct.version' # arbitrary string
-# ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
 from pygame.sprite import AbstractGroup
 
 pygame.init()
@@ -30,14 +28,6 @@ def load_image(name, colorkey=None):
     image = image.convert_alpha()
     return image
 
-def rotate_matrix_right(a):
-    rows = len(a)
-    cols = len(a[0])
-    b = [[0] * rows for i in range(cols)]
-    for i in range(rows):
-        for j in range(cols):
-            b[j][rows - i] = a[i][j]
-    return b
 
 pixelimage = load_image('pix1.png')
 
