@@ -30,6 +30,14 @@ def load_image(name, colorkey=None):
     image = image.convert_alpha()
     return image
 
+def rotate_matrix_right(a):
+    rows = len(a)
+    cols = len(a[0])
+    b = [[0] * rows for i in range(cols)]
+    for i in range(rows):
+        for j in range(cols):
+            b[j][rows - i] = a[i][j]
+    return b
 
 pixelimage = load_image('pix1.png')
 
@@ -119,7 +127,8 @@ class Piece(pygame.sprite.Sprite):
 
     def update(self, *args):
         if args and args[0].type == pygame.MOUSEBUTTONDOWN and self.rect.collidepoint(args[0].pos):
-            self.is_current = not self.is_current
+            if self.in_matrix(args[0].pos[0], args[0].pos[1]):
+                self.is_current = not self.is_current
             if self.is_current:
                 self.dx = self.rect.x - args[0].pos[0]
                 self.dy = self.rect.y - args[0].pos[1]
@@ -136,6 +145,12 @@ class Piece(pygame.sprite.Sprite):
                 self.mirror()
             if pressed[pygame.K_ESCAPE]:
                 self.is_current = False
+
+    def in_matrix(self, x, y):
+        i = (x - self.rect.x) // 60
+        j = (y - self.rect.y) // 60
+        return self.matrix[i][j] == 1
+
 
     def rotate_right(self):
         self.current_state = self.rotate_right_dict[self.current_state]
