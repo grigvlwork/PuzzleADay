@@ -28,7 +28,6 @@ def load_image(name, colorkey=None):
     image = image.convert_alpha()
     return image
 
-
 pixelimage = load_image('pix1.png')
 
 
@@ -65,6 +64,15 @@ class Board:
                       [-1, 0, 0, 0, 0, 0, 0, 0, -1],
                       [-1, 0, 0, 0, -1, -1, -1, -1, -1],
                       [-1, -1, -1, -1, -1, -1, -1, -1, -1]]
+
+    def on_board(self, rect):
+        i = rect.x // 60
+        j = rect.y // 60
+        if i < 9 and j < 9:
+            return self.field[j][i] != -1
+        else:
+            return False
+
 
     def draw(self):
         months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
@@ -115,12 +123,18 @@ class Piece(pygame.sprite.Sprite):
         self.rect.x, self.rect.y = x, y
         self.current_state = 0
 
+
     def update(self, *args):
         if args and args[0].type == pygame.MOUSEBUTTONDOWN and self.rect.collidepoint(args[0].pos):
             if self.in_matrix(args[0].pos[0], args[0].pos[1]):
                 self.is_current = not self.is_current
             else:
                 self.is_current = False
+            if not self.is_current:
+                if board.on_board(self.rect):
+                    self.rect.x -= self.rect.x % 60
+                    self.rect.y -= self.rect.y % 60
+
             if self.is_current:
                 self.dx = self.rect.x - args[0].pos[0]
                 self.dy = self.rect.y - args[0].pos[1]
@@ -141,7 +155,10 @@ class Piece(pygame.sprite.Sprite):
     def in_matrix(self, x, y):
         i = (x - self.rect.x) // 60
         j = (y - self.rect.y) // 60
-        return self.matrix[j][i] == 1
+        if 0 <= i < len(self.matrix[0]) and 0 <= j < len(self.matrix):
+            return self.matrix[j][i] == 1
+        else:
+            return False
 
     def rotate_right(self):
         self.current_state = self.rotate_right_dict[self.current_state]
