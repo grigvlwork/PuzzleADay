@@ -48,8 +48,8 @@ class Board:
         self.z_small_piece = ZSmallPiece(900, 280, self.sprites)
         self.arr_sprites = [self.l_big_piece, self.c_piece, self.l_small_piece, self.o_piece,
                             self.p_piece, self.t_piece, self.z_big_piece, self.z_small_piece]
-        self.l_big_piece.load()
-        self.c_piece.load()
+        for sprite in self.arr_sprites:
+            sprite.load()
         self.current_piece = None
 
     def set_current_piece(self, number):
@@ -134,6 +134,8 @@ class Piece(pygame.sprite.Sprite):
             pressed = pygame.key.get_pressed()
             if pressed[pygame.K_SPACE]:
                 self.mirror()
+            if pressed[pygame.K_ESCAPE]:
+                self.is_current = False
 
     def rotate_right(self):
         self.current_state = self.rotate_right_dict[self.current_state]
@@ -156,7 +158,7 @@ class Piece(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = curr_rect.x
         self.rect.y = curr_rect.y
-
+        self.is_current = False
 
     def load(self):
         pass
@@ -212,7 +214,7 @@ class LSmallPiece(Piece):
 
     def __init__(self, x, y, *group):
         super().__init__(x, y, 3, group)
-        self.image = LSmallPiece.image
+        self.images = [LSmallPiece.image]
         self.rect = self.image.get_rect()
         self.rect.x, self.rect.y = x, y
         self.matrix = [[1, 0],
@@ -220,6 +222,15 @@ class LSmallPiece(Piece):
                        [1, 0],
                        [1, 1]]
         self.visible = 1
+
+    def load(self):
+        list_pics = ['L-smallt90.png', 'L-smallt180.png', 'L-smallt270.png',
+                     'L-smalltmirrv.png', 'L-smalltmirrv90.png', 'L-smalltmirrv180.png', 'L-smalltmirrv270.png']
+        for pic in list_pics:
+            self.images.append(load_image(pic))
+        self.rotate_right_dict = {0: 1, 1: 2, 2: 3, 3: 0, 4: 5, 5: 6, 6: 7, 7: 4}
+        self.rotate_left_dict = {0: 3, 1: 0, 2: 1, 3: 2, 4: 7, 5: 4, 6: 5, 7: 6}
+        self.mirror_dict = {0: 4, 1: 5, 2: 6, 3: 7, 4: 0, 5: 1, 6: 2, 7: 3}
 
 
 class OPiece(Piece):
@@ -227,7 +238,7 @@ class OPiece(Piece):
 
     def __init__(self, x, y, *group):
         super().__init__(x, y, 4, group)
-        self.image = OPiece.image
+        self.images = [OPiece.image]
         self.rect = self.image.get_rect()
         self.rect.x, self.rect.y = x, y
         self.matrix = [[1, 1],
@@ -235,13 +246,21 @@ class OPiece(Piece):
                        [1, 1]]
         self.visible = 1
 
+    def load(self):
+        list_pics = ['Ot90.png']
+        for pic in list_pics:
+            self.images.append(load_image(pic))
+        self.rotate_right_dict = {0: 1, 1: 0}
+        self.rotate_left_dict = {0: 1, 1: 0}
+        self.mirror_dict = {0: 0, 1: 1}
+
 
 class PPiece(Piece):
     image = load_image('Pt.png')
 
     def __init__(self, x, y, *group):
         super().__init__(x, y, 5, group)
-        self.image = PPiece.image
+        self.images = [PPiece.image]
         self.rect = self.image.get_rect()
         self.rect.x, self.rect.y = x, y
         self.matrix = [[1, 1],
@@ -249,13 +268,22 @@ class PPiece(Piece):
                        [1, 0]]
         self.visible = 1
 
+    def load(self):
+        list_pics = ['Pt90.png', 'Pt180.png', 'Pt270.png',
+                     'Ptmirrv.png', 'Ptmirrv90.png', 'Ptmirrv180.png', 'Ptmirrv270.png']
+        for pic in list_pics:
+            self.images.append(load_image(pic))
+        self.rotate_right_dict = {0: 1, 1: 2, 2: 3, 3: 0, 4: 5, 5: 6, 6: 7, 7: 4}
+        self.rotate_left_dict = {0: 3, 1: 0, 2: 1, 3: 2, 4: 7, 5: 4, 6: 5, 7: 6}
+        self.mirror_dict = {0: 4, 1: 5, 2: 6, 3: 7, 4: 0, 5: 1, 6: 2, 7: 3}
+
 
 class TPiece(Piece):
     image = load_image('Tt.png')
 
     def __init__(self, x, y, *group):
         super().__init__(x, y, 6, group)
-        self.image = TPiece.image
+        self.images = [TPiece.image]
         self.rect = self.image.get_rect()
         self.rect.x, self.rect.y = x, y
         self.matrix = [[1, 0],
@@ -264,13 +292,22 @@ class TPiece(Piece):
                        [1, 0]]
         self.visible = 1
 
+    def load(self):
+        list_pics = ['Tt90.png', 'Tt180.png', 'Tt270.png',
+                     'Ttmirrv.png', 'Ttmirrv90.png', 'Ttmirrv180.png', 'Ttmirrv270.png']
+        for pic in list_pics:
+            self.images.append(load_image(pic))
+        self.rotate_right_dict = {0: 1, 1: 2, 2: 3, 3: 0, 4: 5, 5: 6, 6: 7, 7: 4}
+        self.rotate_left_dict = {0: 3, 1: 0, 2: 1, 3: 2, 4: 7, 5: 4, 6: 5, 7: 6}
+        self.mirror_dict = {0: 4, 1: 5, 2: 6, 3: 7, 4: 0, 5: 1, 6: 2, 7: 3}
+
 
 class ZBigPiece(Piece):
     image = load_image('Z-bigt.png')
 
     def __init__(self, x, y, *group):
         super().__init__(x, y, 7, group)
-        self.image = ZBigPiece.image
+        self.images = [ZBigPiece.image]
         self.rect = self.image.get_rect()
         self.rect.x, self.rect.y = x, y
         self.matrix = [[1, 1, 0],
@@ -278,13 +315,21 @@ class ZBigPiece(Piece):
                        [0, 1, 1]]
         self.visible = 1
 
+    def load(self):
+        list_pics = ['Z-bigt90.png', 'Z-bigtmirrv.png', 'Z-bigtmirrv90.png']
+        for pic in list_pics:
+            self.images.append(load_image(pic))
+        self.rotate_right_dict = {0: 1, 1: 0, 2: 3, 3: 2}
+        self.rotate_left_dict = {0: 1, 1: 0, 2: 3, 3: 2}
+        self.mirror_dict = {0: 2, 1: 3, 2: 0, 3: 1}
+
 
 class ZSmallPiece(Piece):
     image = load_image('Z-smallt.png')
 
     def __init__(self, x, y, *group):
         super().__init__(x, y, 8, group)
-        self.image = ZSmallPiece.image
+        self.images = [ZSmallPiece.image]
         self.rect = self.image.get_rect()
         self.rect.x, self.rect.y = x, y
         self.matrix = [[1, 0],
@@ -292,6 +337,15 @@ class ZSmallPiece(Piece):
                        [1, 1],
                        [0, 1]]
         self.visible = 1
+
+    def load(self):
+        list_pics = ['Z-smallt90.png', 'Z-smallt180.png', 'Z-smallt270.png',
+                     'Z-smalltmirrv.png', 'Z-smalltmirrv90.png', 'Z-smalltmirrv180.png', 'Z-smalltmirrv270.png']
+        for pic in list_pics:
+            self.images.append(load_image(pic))
+        self.rotate_right_dict = {0: 1, 1: 2, 2: 3, 3: 0, 4: 5, 5: 6, 6: 7, 7: 4}
+        self.rotate_left_dict = {0: 3, 1: 0, 2: 1, 3: 2, 4: 7, 5: 4, 6: 5, 7: 6}
+        self.mirror_dict = {0: 4, 1: 5, 2: 6, 3: 7, 4: 0, 5: 1, 6: 2, 7: 3}
 
 
 board = Board()
