@@ -119,6 +119,8 @@ class Piece(pygame.sprite.Sprite):
         if args and args[0].type == pygame.MOUSEBUTTONDOWN and self.rect.collidepoint(args[0].pos):
             if self.in_matrix(args[0].pos[0], args[0].pos[1]):
                 self.is_current = not self.is_current
+            else:
+                self.is_current = False
             if self.is_current:
                 self.dx = self.rect.x - args[0].pos[0]
                 self.dy = self.rect.y - args[0].pos[1]
@@ -139,8 +141,7 @@ class Piece(pygame.sprite.Sprite):
     def in_matrix(self, x, y):
         i = (x - self.rect.x) // 60
         j = (y - self.rect.y) // 60
-        return self.matrix[i][j] == 1
-
+        return self.matrix[j][i] == 1
 
     def rotate_right(self):
         self.current_state = self.rotate_right_dict[self.current_state]
@@ -148,6 +149,7 @@ class Piece(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = event.pos[0] + self.dx
         self.rect.y = event.pos[1] + self.dy
+        self.matrix = rotate_matrix_right(self.matrix)
 
     def rotate_left(self):
         self.current_state = self.rotate_left_dict[self.current_state]
@@ -155,6 +157,7 @@ class Piece(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = event.pos[0] + self.dx
         self.rect.y = event.pos[1] + self.dy
+        self.matrix = rotate_matrix_left(self.matrix)
 
     def mirror(self):
         self.current_state = self.mirror_dict[self.current_state]
@@ -164,6 +167,7 @@ class Piece(pygame.sprite.Sprite):
         self.rect.x = curr_rect.x
         self.rect.y = curr_rect.y
         self.is_current = False
+        self.matrix = mirror_matrix(self.matrix)
 
     def load(self):
         pass
@@ -222,10 +226,10 @@ class LSmallPiece(Piece):
         self.images = [LSmallPiece.image]
         self.rect = self.image.get_rect()
         self.rect.x, self.rect.y = x, y
-        self.matrix = [[1, 0],
-                       [1, 0],
-                       [1, 0],
-                       [1, 1]]
+        self.matrix = [[1, 0, 0],
+                       [1, 0, 0],
+                       [1, 0, 0],
+                       [1, 1, 0]]
         self.visible = 1
 
     def load(self):
