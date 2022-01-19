@@ -3,6 +3,7 @@ import os
 import pygame
 import sys
 from matrix_oper import rotate_matrix_right, rotate_matrix_left, mirror_matrix
+from datetime import datetime
 
 from pygame.sprite import AbstractGroup
 
@@ -77,6 +78,9 @@ class Board:
     def draw(self):
         months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
         m = iter(months)
+        now_date = datetime.now()
+        mon_num = now_date.month - 1
+        day_num = now_date.day - 1
         border_color = pygame.Color(135, 83, 24)
         pygame.draw.rect(screen, pygame.Color(245, 198, 144), (0, 0, 540, 540))
         pygame.draw.rect(screen, border_color, (1, 1, 537, 537), 2)
@@ -86,14 +90,22 @@ class Board:
         for i in range(2):
             for j in range(6):
                 pygame.draw.rect(screen, border_color, (60 + j * 60, 60 + i * 60, 60, 60), 2)
-                text = font.render(next(m), 1, border_color)
+                month = next(m)
+                if month == months[mon_num]:
+                    text = font.render(month, 1, pygame.Color('Red'))
+                else:
+                    text = font.render(month, 1, border_color)
                 text_x = 60 + j * 60 + 10
                 text_y = 60 + i * 60 + 20
                 screen.blit(text, (text_x, text_y))
         for i in range(2, 6):
             for j in range(7):
                 pygame.draw.rect(screen, border_color, (60 + j * 60, 60 + i * 60, 60, 60), 2)
-                text = font.render(str(next(num)), 1, border_color)
+                day = next(num)
+                if day == day_num:
+                    text = font.render(str(day), 1, pygame.Color('Red'))
+                else:
+                    text = font.render(str(day), 1, border_color)
                 text_x = 60 + j * 60 + 18
                 text_y = 60 + i * 60 + 20
                 screen.blit(text, (text_x, text_y))

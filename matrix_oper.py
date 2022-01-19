@@ -7,6 +7,7 @@ def rotate_matrix_right(a):
             b[j][rows - i - 1] = a[i][j]
     return b
 
+
 def rotate_matrix_left(a):
     rows = len(a)
     cols = len(a[0])
@@ -16,6 +17,7 @@ def rotate_matrix_left(a):
             b[cols - j - 1][i] = a[i][j]
     return b
 
+
 def mirror_matrix(a):
     rows = len(a)
     cols = len(a[0])
@@ -24,6 +26,3 @@ def mirror_matrix(a):
         for j in range(cols):
             b[rows - i - 1][j] = a[i][j]
     return b
-
-s = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
-print(mirror_matrix(s))
